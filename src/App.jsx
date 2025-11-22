@@ -10,7 +10,8 @@ import Register from './pages/Register'
 import TambahBuku from './pages/TambahBuku'
 import BukuSaya from './pages/BukuSaya'
 import EditBuku from './pages/EditBuku'
-import DetailBuku from './pages/DetailBuku' // <--- INI YANG TERBARU
+import DetailBuku from './pages/DetailBuku'
+import DashboardAdmin from './pages/DashboardAdmin' // <--- IMPORT MENU FINAL BOSS
 
 function App() {
   const [session, setSession] = useState(null)
@@ -42,10 +43,10 @@ function App() {
       <div className="min-h-screen flex flex-col font-sans">
         
         {/* NAVBAR */}
-        <nav className="bg-blue-600 text-white p-4 shadow-md">
+        <nav className="bg-blue-600 text-white p-4 shadow-md sticky top-0 z-50">
           <div className="container mx-auto flex justify-between items-center">
-            <Link to="/" className="text-2xl font-bold tracking-tight hover:text-blue-100">
-              Perpustakaan Digital
+            <Link to="/" className="text-2xl font-bold tracking-tight hover:text-blue-100 flex items-center gap-2">
+              📚 Perpustakaan Digital
             </Link>
             
             <div className="flex gap-4 items-center">
@@ -55,9 +56,14 @@ function App() {
                 <>
                   {/* MENU KHUSUS ADMIN */}
                   {session.user.email === adminEmail && (
-                    <Link to="/tambah" className="hover:text-blue-200 font-semibold text-yellow-300">
-                      + Tambah Buku
-                    </Link> 
+                    <>
+                      <Link to="/admin" className="hover:text-blue-200 font-bold text-green-300">
+                        📊 Dashboard
+                      </Link>
+                      <Link to="/tambah" className="hover:text-blue-200 font-bold text-yellow-300">
+                        + Tambah
+                      </Link> 
+                    </>
                   )}
 
                   {/* MENU MEMBER */}
@@ -66,13 +72,13 @@ function App() {
                   </Link> 
                   
                   {/* INFO USER */}
-                  <div className="hidden md:block text-sm bg-blue-700 px-3 py-1 rounded-full">
+                  <div className="hidden md:block text-sm bg-blue-700 px-3 py-1 rounded-full border border-blue-500">
                     {session.user.email}
                   </div>
                   
                   <button 
                     onClick={handleLogout} 
-                    className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm font-medium transition"
+                    className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm font-medium transition shadow"
                   >
                     Logout
                   </button>
@@ -81,7 +87,7 @@ function App() {
                 <>
                   {/* MENU TAMU */}
                   <Link to="/login" className="hover:text-blue-200 font-medium">Login</Link>
-                  <Link to="/register" className="hover:text-blue-200 font-medium">Register</Link>
+                  <Link to="/register" className="bg-white text-blue-600 px-3 py-1 rounded font-medium hover:bg-gray-100 transition">Register</Link>
                 </>
               )}
             </div>
@@ -99,8 +105,9 @@ function App() {
             <Route path="/tambah" element={<TambahBuku />} />
             <Route path="/buku-saya" element={<BukuSaya />} />
             <Route path="/edit/:id" element={<EditBuku />} />
+            <Route path="/admin" element={<DashboardAdmin />} /> {/* <--- RUTE FINAL BOSS */}
             
-            {/* Halaman Detail (Baru) */}
+            {/* Halaman Detail */}
             <Route path="/buku/:id" element={<DetailBuku />} />
           </Routes>
         </main>
