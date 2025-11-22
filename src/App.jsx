@@ -5,12 +5,13 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import TambahBuku from './pages/TambahBuku'
+import BukuSaya from './pages/BukuSaya' // <--- 1. IMPORT INI
 
 function App() {
   const [session, setSession] = useState(null)
-
+  
   // GANTI EMAIL INI DENGAN EMAIL ADMIN KAMU
-  const adminEmail = "tes1@coba.com"
+  const adminEmail = "tes1@coba.com" 
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -39,12 +40,17 @@ function App() {
               
               {session ? (
                 <>
-                  {/* LOGIKA BARU: Cuma Admin yang lihat menu ini */}
+                  {/* LINK KHUSUS ADMIN */}
                   {session.user.email === adminEmail && (
                     <Link to="/tambah" className="hover:text-blue-200 font-semibold text-yellow-300">
                       + Tambah Buku
                     </Link> 
                   )}
+
+                  {/* LINK BUKU SAYA (Semua User Login bisa lihat) */}
+                  <Link to="/buku-saya" className="hover:text-blue-200">
+                    Buku Saya
+                  </Link> 
                   
                   <span className="text-sm bg-blue-700 px-3 py-1 rounded">
                     {session.user.email}
@@ -69,6 +75,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/tambah" element={<TambahBuku />} />
+            <Route path="/buku-saya" element={<BukuSaya />} /> {/* <--- 2. RUTE BARU */}
           </Routes>
         </main>
 
