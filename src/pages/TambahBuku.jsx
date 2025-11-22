@@ -11,7 +11,7 @@ const TambahBuku = () => {
   const navigate = useNavigate()
 
   // GANTI EMAIL INI DENGAN EMAIL ADMIN KAMU
-  const adminEmail = "tes1@coba.com"
+  const adminEmail = "alwznx@gmail.com"
 
   // SATPAM: Cek saat halaman dibuka
   useEffect(() => {

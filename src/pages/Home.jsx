@@ -1,122 +1,142 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabaseClient'
+import toast from 'react-hot-toast' // Import Notifikasi
+import { FaTrash, FaBookReader, FaSearch } from 'react-icons/fa' // Import Ikon
 
 const Home = () => {
   const [books, setBooks] = useState([])
-  const [session, setSession] = useState(null) // Simpan data user login
+  const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [keyword, setKeyword] = useState('')
 
-  // GANTI DENGAN EMAIL KAMU SUPAYA JADI ADMIN
-  const adminEmail = "tes1@coba.com" 
+  // GANTI DENGAN EMAIL ADMIN KAMU
+  const adminEmail = "alwznx@gmail.com" 
 
   useEffect(() => {
-    // 1. Cek siapa yang login
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
     })
-
     getBooks()
   }, [])
 
   const getBooks = async () => {
     setLoading(true)
-    const { data, error } = await supabase
-      .from('books')
-      .select('*')
-      .order('id', { ascending: false })
+    const { data, error } = await supabase.from('books').select('*').order('id', { ascending: false })
     
     if (error) console.log("Gagal ambil buku:", error.message)
     else setBooks(data)
-    
     setLoading(false)
   }
 
   const deleteBook = async (id) => {
+    // Ganti window.confirm biasa dengan toast promise (opsional), tapi biar simpel pakai confirm dulu
     if (!confirm("Yakin mau hapus buku ini?")) return
     
     const { error } = await supabase.from('books').delete().eq('id', id)
-    if (error) alert("Gagal hapus: " + error.message)
-    else {
-      alert("Buku terhapus!")
+    
+    if (error) {
+      toast.error("Gagal menghapus buku!") // Notifikasi Merah
+    } else {
+      toast.success("Buku berhasil dihapus!", { icon: '🗑️' }) // Notifikasi Hijau
       getBooks()
     }
   }
 
-  // FUNGSI BARU: Pinjam Buku
   const borrowBook = async (bookId) => {
     if (!session) {
-      alert("Silakan login dulu untuk meminjam!")
+      toast.error("Eits, login dulu dong!")
       return
     }
-
-    // Masukkan data ke tabel 'borrowed_books'
-    const { error } = await supabase
-      .from('borrowed_books')
-      .insert([
-        { 
-          user_id: session.user.id, // Siapa yang minjam
-          book_id: bookId           // Buku apa yang dipinjam
-        }
-      ])
-
+    const { error } = await supabase.from('borrowed_books').insert([
+      { user_id: session.user.id, book_id: bookId }
+    ])
+    
     if (error) {
-      alert("Gagal meminjam: " + error.message)
+      toast.error("Gagal meminjam: " + error.message)
     } else {
-      alert("Buku berhasil dipinjam! Selamat membaca.")
+      toast.success("Berhasil dipinjam! Cek di menu 'Buku Saya'")
     }
   }
 
+  const filteredBooks = books.filter((book) => 
+    book.title.toLowerCase().includes(keyword.toLowerCase()) || 
+    book.author.toLowerCase().includes(keyword.toLowerCase())
+  )
+
   return (
     <div className="container mx-auto p-8">
-      <h2 className="text-3xl font-bold mb-6 text-center text-blue-800">
-        📚 Koleksi Perpustakaan
-      </h2>
+      
+      {/* Header dengan Icon */}
+      <div className="text-center mb-10">
+        <h2 className="text-4xl font-bold text-gray-800 mb-2">Perpustakaan Digital</h2>
+        <p className="text-gray-500">Temukan wawasan baru di setiap halaman.</p>
+      </div>
 
-      {/* PESAN SELAMAT DATANG SESUAI ROLE */}
-      {session && (
-        <div className="text-center mb-6 text-gray-600">
-          Login sebagai: <span className="font-bold">{session.user.email}</span>
-          {session.user.email === adminEmail && <span className="ml-2 text-red-500">(Admin)</span>}
+      {session && session.user.email === adminEmail && (
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 mx-auto max-w-2xl rounded shadow-sm">
+          <p className="font-bold">Mode Admin Aktif</p>
+          <p className="text-sm">Anda memiliki akses untuk menghapus dan menambah buku.</p>
         </div>
       )}
 
+      {/* Input Pencarian Cantik */}
+      <div className="mb-10 flex justify-center">
+        <div className="relative w-full max-w-lg">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <FaSearch className="text-gray-400" />
+          </div>
+          <input 
+            type="text"
+            placeholder="Cari judul buku atau penulis..." 
+            className="w-full pl-10 p-3 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+        </div>
+      </div>
+
       {loading ? (
-        <p className="text-center">Sedang memuat...</p>
+        <div className="flex justify-center items-center h-40">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {books.map((book) => (
-            <div key={book.id} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition flex flex-col justify-between">
-              <div>
-                <h3 className="text-xl font-bold mb-2 text-gray-800">{book.title}</h3>
-                <p className="text-sm text-blue-600 font-semibold mb-3">Penulis: {book.author}</p>
-                <p className="text-gray-600 text-sm mb-4">{book.description}</p>
-              </div>
-              
-              <div className="flex gap-2 mt-4">
-                
-                {/* TOMBOL PINJAM (Hanya untuk yang sudah login) */}
-                {session && (
-                  <button 
-                    onClick={() => borrowBook(book.id)}
-                    className="flex-1 bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 text-sm transition"
-                  >
-                    📖 Pinjam
-                  </button>
-                )}
-
-                {/* TOMBOL HAPUS (Hanya untuk ADMIN) */}
-                {session && session.user.email === adminEmail && (
-                  <button 
-                    onClick={() => deleteBook(book.id)}
-                    className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 text-sm transition"
-                  >
-                    🗑️ Hapus
-                  </button>
-                )}
-
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {filteredBooks.length === 0 ? (
+            <div className="col-span-3 text-center py-10">
+              <p className="text-gray-500 text-lg">Buku tidak ditemukan 😔</p>
             </div>
-          ))}
+          ) : (
+            filteredBooks.map((book) => (
+              <div key={book.id} className="bg-white p-6 rounded-xl shadow hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 flex flex-col justify-between border border-gray-100">
+                <div>
+                  <h3 className="text-xl font-bold mb-1 text-gray-800 line-clamp-2">{book.title}</h3>
+                  <p className="text-sm text-blue-600 font-semibold mb-3">{book.author}</p>
+                  <p className="text-gray-500 text-sm mb-4 line-clamp-3 leading-relaxed">{book.description}</p>
+                </div>
+                
+                <div className="flex gap-3 mt-4 pt-4 border-t border-gray-100">
+                  {session && (
+                    <button 
+                      onClick={() => borrowBook(book.id)}
+                      className="flex-1 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2 group"
+                    >
+                      <FaBookReader className="text-lg group-hover:scale-110 transition" /> 
+                      Pinjam
+                    </button>
+                  )}
+                  {session && session.user.email === adminEmail && (
+                    <button 
+                      onClick={() => deleteBook(book.id)}
+                      className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-4 py-2 rounded-lg transition flex items-center justify-center"
+                      title="Hapus Buku"
+                    >
+                      <FaTrash />
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>
