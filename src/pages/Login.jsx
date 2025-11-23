@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../supabaseClient'
-import { useNavigate } from 'react-router-dom' // Alat untuk pindah halaman
+import { useNavigate } from 'react-router-dom' 
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -8,7 +8,7 @@ const Login = () => {
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   
-  const navigate = useNavigate() // Siapkan alat navigasinya
+  const navigate = useNavigate() 
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -24,9 +24,6 @@ const Login = () => {
     if (error) {
       setMessage('Gagal Login: ' + error.message)
     } else {
-      // Kalau sukses:
-      // 1. Tampilkan pesan sebentar (opsional)
-      // 2. Pindahkan ke halaman Home ('/')
       navigate('/') 
     }
     setLoading(false)

@@ -17,7 +17,7 @@ export const sendNotification = async (userId, message) => {
       { 
         user_id: userId, 
         message: message,
-        is_read: false // Default belum dibaca
+        is_read: false
       }
     ])
   

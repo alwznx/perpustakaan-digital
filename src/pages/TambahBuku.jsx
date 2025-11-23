@@ -8,12 +8,12 @@ const TambahBuku = () => {
   const [author, setAuthor] = useState('')
   const [description, setDescription] = useState('')
   const [stock, setStock] = useState(1)
-  const [category, setCategory] = useState('Umum') // <--- STATE BARU
+  const [category, setCategory] = useState('Umum') 
   const [image, setImage] = useState(null)
   const [loading, setLoading] = useState(false)
   
   const navigate = useNavigate()
-  const adminEmail = "alwznx@gmail.com" // GANTI EMAIL KAMU
+  const adminEmail = "alwznx@gmail.com" 
 
   useEffect(() => {
     const checkAdmin = async () => {
@@ -42,7 +42,7 @@ const TambahBuku = () => {
     const { error } = await supabase.from('books').insert([{ 
       title, author, description, image_url: imageUrl, 
       stock: parseInt(stock),
-      category: category // <--- SIMPAN KATEGORI
+      category: category 
     }])
 
     if (error) toast.error('Gagal simpan: ' + error.message)

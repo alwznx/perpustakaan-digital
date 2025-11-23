@@ -18,7 +18,7 @@ const Notifikasi = () => {
         .from('notifications')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false }) // Pesan baru di atas
+        .order('created_at', { ascending: false })
       setNotifs(data || [])
     }
     setLoading(false)

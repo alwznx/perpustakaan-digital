@@ -57,7 +57,6 @@ const Home = () => {
   const borrowBook = async (book) => {
     if (!session) { toast.error("Login dulu!"); return }
     
-    // --- LOGIKA BARU: CEK BATAS PEMINJAMAN (MAKS 3) ---
     const MAX_LOANS = 3
     
     // 1. Hitung jumlah buku yang sedang dipinjam user ini
@@ -74,7 +73,7 @@ const Home = () => {
     // 2. Kalau sudah 3 atau lebih, tolak!
     if (count >= MAX_LOANS) {
       toast.error(`Kuota habis! Kamu cuma boleh pinjam maks ${MAX_LOANS} buku.`)
-      return // <--- STOP DI SINI
+      return 
     }
 
     if (book.stock <= 0) {
@@ -100,11 +99,7 @@ const Home = () => {
         toast.error("Gagal pinjam")
       } else {
         toast.success("Berhasil! Cek 'Buku Saya'.")
-        
-        // --- KIRIM NOTIFIKASI KE INBOX ---
         sendNotification(session.user.id, `Berhasil meminjam buku: ${book.title}. Jangan lupa kembalikan tanggal ${dueDate.toLocaleDateString('id-ID')} ya!`)
-        // ---------------------------------
-  
         getBooks()
       }
   }

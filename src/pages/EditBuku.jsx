@@ -11,10 +11,10 @@ const EditBuku = () => {
   const [author, setAuthor] = useState('')
   const [description, setDescription] = useState('')
   const [stock, setStock] = useState(0)
-  const [category, setCategory] = useState('Umum') // <--- STATE
+  const [category, setCategory] = useState('Umum') 
   const [loading, setLoading] = useState(true)
 
-  const adminEmail = "alwznx@gmail.com" // GANTI EMAIL KAMU
+  const adminEmail = "alwznx@gmail.com" 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +34,7 @@ const EditBuku = () => {
         setAuthor(data.author)
         setDescription(data.description)
         setStock(data.stock)
-        setCategory(data.category || 'Umum') // <--- AMBIL DATA LAMA
+        setCategory(data.category || 'Umum') 
         setLoading(false)
       }
     }
@@ -46,7 +46,7 @@ const EditBuku = () => {
     const { error } = await supabase.from('books').update({ 
         title, author, description, 
         stock: parseInt(stock),
-        category // <--- UPDATE KATEGORI
+        category 
       }).eq('id', id)
 
     if (error) toast.error('Gagal update: ' + error.message)

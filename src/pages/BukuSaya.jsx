@@ -44,7 +44,6 @@ const BukuSaya = () => {
   const returnBook = async (borrowId, bookId, currentStock) => {
     if (!confirm("Kembalikan buku ini?")) return
 
-    // Ambil user ID saat ini
     const { data: { user } } = await supabase.auth.getUser()
 
     const { error: deleteError } = await supabase.from('borrowed_books').delete().eq('id', borrowId)
@@ -56,7 +55,6 @@ const BukuSaya = () => {
     else {
       toast.success("Buku dikembalikan!")
       
-      // KIRIM PESAN
       if (user) {
         sendNotification(user.id, "Buku berhasil dikembalikan. Terima kasih sudah membaca!")
       }

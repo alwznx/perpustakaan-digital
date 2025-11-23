@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
-import { FaHeart, FaUserCircle, FaSun, FaMoon, FaBars, FaTimes, FaUsers, FaBell } from 'react-icons/fa' // <--- Tambah FaBell
+import { FaHeart, FaUserCircle, FaSun, FaMoon, FaBars, FaTimes, FaUsers, FaBell } from 'react-icons/fa'
 import { AnimatePresence } from 'framer-motion'
 
 // Import Semua Halaman
@@ -18,7 +18,7 @@ import FavoritSaya from './pages/FavoritSaya'
 import ProfilSaya from './pages/ProfilSaya'
 import NotFound from './pages/NotFound'
 import Komunitas from './pages/Komunitas'
-import Notifikasi from './pages/Notifikasi' // <--- IMPORT HALAMAN BARU
+import Notifikasi from './pages/Notifikasi' 
 
 const ScrollToTop = () => {
   const { pathname } = useLocation()
@@ -42,7 +42,7 @@ const AnimatedRoutes = () => {
         <Route path="/favorit" element={<FavoritSaya />} />
         <Route path="/profil" element={<ProfilSaya />} />
         <Route path="/komunitas" element={<Komunitas />} />
-        <Route path="/notifikasi" element={<Notifikasi />} /> {/* <--- RUTE BARU */}
+        <Route path="/notifikasi" element={<Notifikasi />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
@@ -54,9 +54,9 @@ function App() {
   const [avatarUrl, setAvatarUrl] = useState(null)
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('theme') === 'dark')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [unreadCount, setUnreadCount] = useState(0) // <--- STATE JUMLAH NOTIF
+  const [unreadCount, setUnreadCount] = useState(0) 
 
-  const adminEmail = "alwznx@gmail.com" // <--- GANTI EMAIL KAMU
+  const adminEmail = "alwznx@gmail.com"
 
   useEffect(() => {
     if (darkMode) { document.documentElement.classList.add('dark'); localStorage.setItem('theme', 'dark') }

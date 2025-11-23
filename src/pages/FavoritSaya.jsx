@@ -33,7 +33,7 @@ const FavoritSaya = () => {
     if (error) toast.error("Gagal hapus")
     else {
       toast.success("Dihapus dari favorit")
-      fetchFavorites() // Refresh
+      fetchFavorites() 
     }
   }
 

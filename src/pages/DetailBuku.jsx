@@ -36,7 +36,7 @@ const DetailBuku = () => {
       .from('reviews')
       .select('*')
       .eq('book_id', id)
-      .order('created_at', { ascending: false }) // Yang baru di atas
+      .order('created_at', { ascending: false }) 
     setReviews(data || [])
   }
 
@@ -57,8 +57,8 @@ const DetailBuku = () => {
       toast.error("Gagal kirim review")
     } else {
       toast.success("Review terkirim!")
-      setComment('') // Kosongkan form
-      fetchReviews() // Refresh daftar review
+      setComment('') 
+      fetchReviews() 
     }
   }
 

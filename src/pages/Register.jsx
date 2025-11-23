@@ -1,16 +1,16 @@
 import { useState } from 'react'
-import { supabase } from '../supabaseClient' // Kita panggil "jembatan" yang tadi dibuat
+import { supabase } from '../supabaseClient'
 
 const Register = () => {
   // 1. Ini adalah "Ingatan" (State) untuk menyimpan inputan user
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [message, setMessage] = useState('') // Untuk pesan sukses/gagal
-  const [loading, setLoading] = useState(false) // Untuk status loading
+  const [message, setMessage] = useState('') 
+  const [loading, setLoading] = useState(false) 
 
   // 2. Fungsi yang jalan saat tombol "Daftar" diklik
   const handleRegister = async (e) => {
-    e.preventDefault() // Mencegah halaman refresh otomatis
+    e.preventDefault() 
     setLoading(true)
     
     // Kirim data ke Supabase
@@ -49,7 +49,7 @@ const Register = () => {
             className="w-full p-2 border border-gray-300 rounded"
             placeholder="nama@email.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} // Simpan ketikan ke State
+            onChange={(e) => setEmail(e.target.value)} 
             required
           />
         </div>
@@ -62,7 +62,7 @@ const Register = () => {
             className="w-full p-2 border border-gray-300 rounded"
             placeholder="******"
             value={password}
-            onChange={(e) => setPassword(e.target.value)} // Simpan ketikan ke State
+            onChange={(e) => setPassword(e.target.value)} 
             required
           />
         </div>
@@ -70,7 +70,7 @@ const Register = () => {
         {/* Tombol Submit */}
         <button 
           type="submit" 
-          disabled={loading} // Matikan tombol kalau lagi loading
+          disabled={loading} 
           className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700 transition"
         >
           {loading ? 'Sedang Memproses...' : 'Daftar Sekarang'}

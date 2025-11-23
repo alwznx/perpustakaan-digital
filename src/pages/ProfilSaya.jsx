@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../supabaseClient'
 import toast from 'react-hot-toast'
-import QRCode from 'react-qr-code' // <--- 1. IMPORT QR
-import html2canvas from 'html2canvas' // <--- 2. IMPORT SCREENSHOT TOOL
+import QRCode from 'react-qr-code'
+import html2canvas from 'html2canvas' 
 import { FaDownload, FaIdCard } from 'react-icons/fa'
 
 const ProfilSaya = () => {
@@ -158,7 +158,7 @@ const ProfilSaya = () => {
             ref={cardRef}
             className="relative w-full max-w-sm h-56 rounded-2xl shadow-2xl overflow-hidden text-white transition-transform hover:scale-105 duration-300"
             style={{
-              background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)' // Gradasi Biru Keren
+              background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)' 
             }}
           >
             {/* Dekorasi Background */}
@@ -199,7 +199,7 @@ const ProfilSaya = () => {
               <div className="absolute bottom-4 right-4 bg-white p-1 rounded-lg shadow-sm">
                 {session && (
                   <QRCode 
-                    value={session.user.id} // Isi QR adalah ID User
+                    value={session.user.id} 
                     size={60}
                     viewBox={`0 0 256 256`}
                   />

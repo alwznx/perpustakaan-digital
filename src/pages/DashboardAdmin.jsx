@@ -105,8 +105,6 @@ const DashboardAdmin = () => {
         <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 h-64 transition-colors">
           <h3 className="text-lg font-bold text-gray-700 dark:text-white mb-4">Distribusi Koleksi Buku</h3>
           <ResponsiveContainer width="100%" height="100%">
-            {/* NOTE: Karena Recharts tidak support Tailwind CSS di dalam grafiknya, 
-            kita harus menggunakan prop `stroke` pada XAxis dan YAxis untuk mengubah warna teks. */}
             <BarChart data={stats}>
               <XAxis dataKey="name" tick={{fontSize: 12}} stroke="#9ca3af" /> 
               <YAxis allowDecimals={false} stroke="#9ca3af" />
